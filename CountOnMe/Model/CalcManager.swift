@@ -10,11 +10,40 @@ import Foundation
 
 class CalcManager {
 
-    init() {
-        
+    init() { }
+
+    private func getIsExpressionContainingComplexCalc(_ expression: [String]) -> Bool {
+        let result = (expression.contains("*") || expression.contains("/")) &&
+        (expression.contains("+") || expression.contains("-"))
+        return result
     }
 
-    func calculate(expression: [String]) -> String {
+    private var isExpressionContainingComplexCalc = false
+
+    func calculateExpression(expression: [String]) -> String {
+        var operationsToReduce = expression
+        isExpressionContainingComplexCalc = getIsExpressionContainingComplexCalc(expression)
+        if isExpressionContainingComplexCalc {
+            while isExpressionContainingComplexCalc {
+                let index: Int! = operationsToReduce.firstIndex { $0 == "*" || $0 == "/"}
+                let result = calculate(
+                    expression: [
+                        operationsToReduce[index - 1],
+                        operationsToReduce[index],
+                        operationsToReduce[index + 1]
+                    ])
+                operationsToReduce.remove(at: index - 1)
+                operationsToReduce.remove(at: index - 1) // Factoriser
+                operationsToReduce.remove(at: index - 1)
+                operationsToReduce.insert(result, at: index - 1)
+                isExpressionContainingComplexCalc = getIsExpressionContainingComplexCalc(operationsToReduce)
+            }
+            return calculate(expression: operationsToReduce)
+        }
+        return calculate(expression: operationsToReduce)
+    }
+
+    private func calculate(expression: [String]) -> String {
         // Create local copy of operations
         var operationsToReduce = expression
         // Iterate over operations while an operand still here
@@ -36,6 +65,7 @@ class CalcManager {
             operationsToReduce.insert("\(result)", at: 0)
         }
 
+        print(operationsToReduce)
         return operationsToReduce.first!
     }
 
@@ -52,6 +82,9 @@ class CalcManager {
     }
 
     private func divide(_ first: Int, with second: Int) -> Int {
+        if first == 0 || second == 0 {
+            return 0 // Should throw error ?w
+        }
         return first / second
     }
 }

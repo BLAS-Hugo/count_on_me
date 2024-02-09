@@ -18,6 +18,11 @@ class ViewController: UIViewController {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let result = calculationManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4", "/", "0"])
+    }
+
     // Error check computed variables
     var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-"
@@ -97,7 +102,7 @@ class ViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
 
-        let result = calculationManager.calculate(expression: elements)
+        let result = calculationManager.calculateExpression(expression: elements)
 
         textView.text.append(" = \(result)")
     }

@@ -21,28 +21,46 @@ final class CalcManagerTests: XCTestCase {
 
     let calcManager = CalcManager()
 
-    func testGivenOnePlusOneCalc_WhenAdded_ThenReturnTwo() {
-        let result = calcManager.calculate(expression: ["1", "+", "1"])
+    func testGivenDivisionByZero_WhenRun_ThenReturnZero() { // ?
+        let result = calcManager.calculateExpression(expression: ["4", "/", "0"])
 
-        XCTAssert(result == "2")
+        XCTAssertEqual(result, "0")
+    }
+
+    func testGivenOnePlusOneCalc_WhenAdded_ThenReturnTwo() {
+        let result = calcManager.calculateExpression(expression: ["1", "+", "1"])
+
+        XCTAssertEqual(result, "2")
     }
 
     func testGivenTwoMinusOneCalc_WhenSubstracted_ThenReturnOne() {
-        let result = calcManager.calculate(expression: ["2", "-", "1"])
+        let result = calcManager.calculateExpression(expression: ["2", "-", "1"])
 
-        XCTAssert(result == "1")
+        XCTAssertEqual(result, "1")
     }
 
     func testGivenTwoTimesTwoCalc_WhenMultiplicated_ThenReturnFour() {
-        let result = calcManager.calculate(expression: ["2", "*", "2"])
+        let result = calcManager.calculateExpression(expression: ["2", "*", "2"])
 
-        XCTAssert(result == "4")
+        XCTAssertEqual(result, "4")
     }
 
     func testGivenTwoDividedByTwoCalc_WhenDivided_ThenReturnOne() {
-        let result = calcManager.calculate(expression: ["2", "/", "2"])
+        let result = calcManager.calculateExpression(expression: ["2", "/", "2"])
 
-        XCTAssert(result == "1")
+        XCTAssertEqual(result, "1")
+    }
+
+    func testComplex() { // rename
+        let result = calcManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4"])
+
+        XCTAssertEqual(result, "3")
+    }
+
+    func testComplex2() { // rename
+        let result = calcManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4", "+", "6", "/", "2"])
+
+        XCTAssertEqual(result, "0")
     }
 
 }
