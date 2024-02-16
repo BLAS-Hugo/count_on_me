@@ -20,30 +20,35 @@ class CalcManager {
 
     private var isExpressionContainingComplexCalc = false
 
-    func calculateExpression(expression: [String]) -> String {
+    func calculateExpression(expression: [String]) throws -> String {
         var operationsToReduce = expression
         isExpressionContainingComplexCalc = getIsExpressionContainingComplexCalc(expression)
         if isExpressionContainingComplexCalc {
             while isExpressionContainingComplexCalc {
                 let index: Int! = operationsToReduce.firstIndex { $0 == "*" || $0 == "/"}
-                let result = calculate(
-                    expression: [
-                        operationsToReduce[index - 1],
-                        operationsToReduce[index],
-                        operationsToReduce[index + 1]
-                    ])
+                let result =  try calculate(
+                        expression: [
+                            operationsToReduce[index - 1],
+                            operationsToReduce[index],
+                            operationsToReduce[index + 1]
+                        ])
+
                 operationsToReduce.remove(at: index - 1)
                 operationsToReduce.remove(at: index - 1) // Factoriser
                 operationsToReduce.remove(at: index - 1)
                 operationsToReduce.insert(result, at: index - 1)
                 isExpressionContainingComplexCalc = getIsExpressionContainingComplexCalc(operationsToReduce)
             }
-            return calculate(expression: operationsToReduce)
+
+                return  try calculate(expression: operationsToReduce)
+
         }
-        return calculate(expression: operationsToReduce)
+
+            return  try calculate(expression: operationsToReduce)
+
     }
 
-    private func calculate(expression: [String]) -> String {
+    private func calculate(expression: [String]) throws -> String {
         // Create local copy of operations
         var operationsToReduce = expression
         // Iterate over operations while an operand still here
@@ -58,7 +63,7 @@ class CalcManager {
             case "-": result = substract(left, with: right)
             case "*": result = multiply(left, with: right)
             case "/": result = divide(left, with: right)
-            default: fatalError("Unknown operator !")
+            default: throw Errors.invalidOperatorError
             }
 
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
@@ -83,8 +88,12 @@ class CalcManager {
 
     private func divide(_ first: Int, with second: Int) -> Int {
         if first == 0 || second == 0 {
-            return 0 // Should throw error ?w
+            return 0 // return err
         }
         return first / second
     }
+}
+
+enum Errors: Error {
+    case invalidOperatorError
 }

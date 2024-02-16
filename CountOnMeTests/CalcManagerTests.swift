@@ -9,6 +9,8 @@
 import XCTest
 @testable import CountOnMe
 
+// swiftlint:disable force_try
+
 final class CalcManagerTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -21,46 +23,54 @@ final class CalcManagerTests: XCTestCase {
 
     let calcManager = CalcManager()
 
-    func testGivenDivisionByZero_WhenRun_ThenReturnZero() { // ?
-        let result = calcManager.calculateExpression(expression: ["4", "/", "0"])
+    func testGivenDivisionByZero_WhenRun_ThenReturnZero() { // return err
+        let result = try! calcManager.calculateExpression(expression: ["4", "/", "0"])
 
         XCTAssertEqual(result, "0")
     }
 
     func testGivenOnePlusOneCalc_WhenAdded_ThenReturnTwo() {
-        let result = calcManager.calculateExpression(expression: ["1", "+", "1"])
+        let result = try! calcManager.calculateExpression(expression: ["1", "+", "1"])
 
         XCTAssertEqual(result, "2")
     }
 
     func testGivenTwoMinusOneCalc_WhenSubstracted_ThenReturnOne() {
-        let result = calcManager.calculateExpression(expression: ["2", "-", "1"])
+        let result = try! calcManager.calculateExpression(expression: ["2", "-", "1"])
 
         XCTAssertEqual(result, "1")
     }
 
     func testGivenTwoTimesTwoCalc_WhenMultiplicated_ThenReturnFour() {
-        let result = calcManager.calculateExpression(expression: ["2", "*", "2"])
+        let result = try! calcManager.calculateExpression(expression: ["2", "*", "2"])
 
         XCTAssertEqual(result, "4")
     }
 
     func testGivenTwoDividedByTwoCalc_WhenDivided_ThenReturnOne() {
-        let result = calcManager.calculateExpression(expression: ["2", "/", "2"])
+        let result = try! calcManager.calculateExpression(expression: ["2", "/", "2"])
 
         XCTAssertEqual(result, "1")
     }
 
-    func testComplex() { // rename
-        let result = calcManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4"])
+    func testGivenComplexOperation() { // rename
+        let result = try! calcManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4"])
 
         XCTAssertEqual(result, "3")
     }
 
     func testComplex2() { // rename
-        let result = calcManager.calculateExpression(expression: ["1", "+", "2", "*", "3", "-", "4", "+", "6", "/", "2"])
+        let result = try! calcManager.calculateExpression(
+            expression: ["1", "+", "2", "*", "3", "-", "4", "+", "6", "/", "2"])
 
-        XCTAssertEqual(result, "0")
+        XCTAssertEqual(result, "6")
     }
 
+    func testGivenWrongOperator_WhenCalculated_ThenThrowsFatalError() {
+        XCTAssertThrowsError(try calcManager.calculateExpression(
+            expression: ["1", ")", "2", "$", "3", "ù", "4", "'", "6", "`", "2"]), "Invalid Operator", { _ in
+                print("error")
+            })
+    }
 }
+// swiftlint:enable force_try
