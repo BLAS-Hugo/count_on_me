@@ -74,8 +74,6 @@ class CalcManager {
             operationsToReduce.insert(result, at: 0)
         }
 
-
-        print(operationsToReduce)
         return operationsToReduce.first!
     }
 
@@ -95,7 +93,8 @@ class CalcManager {
         if first == 0 || second == 0 {
             return "err"
         }
-        return "\(first / second)"
+        let result: Float = Float(first) / Float(second)
+        return "\(result)"
     }
 }
 

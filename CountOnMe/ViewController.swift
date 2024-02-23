@@ -18,10 +18,6 @@ class ViewController: UIViewController {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     // Error check computed variables
     private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "/"
