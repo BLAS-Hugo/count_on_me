@@ -108,6 +108,10 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func tappedACButon(_ sender: UIButton) {
+        textView.text = ""
+    }
+
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard expressionIsCorrect else {
             let alertVC = UIAlertController(

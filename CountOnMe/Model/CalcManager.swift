@@ -57,7 +57,7 @@ class CalcManager {
             let operand = operationsToReduce[1]
             let right = Int(operationsToReduce[2])!
 
-            let result: Int
+            let result: String
             switch operand {
             case "+": result = add(left, with: right)
             case "-": result = substract(left, with: right)
@@ -66,31 +66,36 @@ class CalcManager {
             default: throw Errors.invalidOperatorError
             }
 
+            if result == "err" {
+                return "err"
+            }
+
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
+            operationsToReduce.insert(result, at: 0)
         }
+
 
         print(operationsToReduce)
         return operationsToReduce.first!
     }
 
-    private func add(_ first: Int, with second: Int) -> Int {
-        return first + second
+    private func add(_ first: Int, with second: Int) -> String {
+        return "\(first + second)"
     }
 
-    private func substract(_ first: Int, with second: Int) -> Int {
-        return first - second
+    private func substract(_ first: Int, with second: Int) -> String {
+        return "\(first - second)"
     }
 
-    private func multiply(_ first: Int, with second: Int) -> Int {
-        return first * second
+    private func multiply(_ first: Int, with second: Int) -> String {
+        return "\(first * second)"
     }
 
-    private func divide(_ first: Int, with second: Int) -> Int {
+    private func divide(_ first: Int, with second: Int) -> String {
         if first == 0 || second == 0 {
-            return 0 // return err
+            return "err"
         }
-        return first / second
+        return "\(first / second)"
     }
 }
 
